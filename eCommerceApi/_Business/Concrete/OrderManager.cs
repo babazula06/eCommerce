@@ -70,7 +70,7 @@ namespace _Business.Concrete
             Order.RecordStatus = 1;
             _OrderDal.Add(Order);
 
-
+            int totalSalesCount = 0;
             //Toplam satış hedefine ulaşıp ulaşmadığı kontrolü
             if (Campaign != null)
             {
@@ -78,8 +78,13 @@ namespace _Business.Concrete
 
                 if (orderList != null)
                 {
-                    
-                    if(Campaign.TargetSalesCount <= orderList.Count)
+                    for (int i = 0; i < orderList.Count; i++)
+                    {
+                      
+                        totalSalesCount += orderList[i].OrderQuantity;
+                    }
+
+                    if (Campaign.TargetSalesCount <= totalSalesCount)
                     {
                         Campaign.RecordStatus = 9; // eğer hedeflenen satış miktarına erişmişse toplam satış kampanya statüsü 9 çekilerek pasif edildi.
                         _CampaignDal.Update(Campaign);
