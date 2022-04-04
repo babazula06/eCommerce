@@ -56,12 +56,20 @@ namespace _Business.Concrete
                 Order.CampaignId = 0;
              
             }
+            if(Product.Stock < Quantity)
+            {
+                return new ErrorResult("Not enough items in stock!");
+            }
+
+            Product.Stock = Product.Stock - Quantity;
+            _ProductDal.Update(Product);
 
             Order.OrderPrice = Product.PriceActual;
             Order.OrderQuantity = Quantity;        
             Order.CreateTime = DateTime.Now;          
             Order.RecordStatus = 1;
             _OrderDal.Add(Order);
+
 
             //Toplam satış hedefine ulaşıp ulaşmadığı kontrolü
             if (Campaign != null)
